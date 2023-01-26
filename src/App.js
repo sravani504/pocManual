@@ -6,7 +6,7 @@ import EditPage from './components/pages/EditPage';
 import EditChapter from './components/pages/Ckeditorapp';
 import ReadChapter from './components/pages/ReadChapter';
 import Ckeditorapp from './components/pages/Ckeditorapp';
-import Chapters from './components/Chapters';
+import Add from './components/Add';
 
 
 
@@ -17,9 +17,9 @@ function App() {
       <Router>
       <Routes>
      <Route path="/" element={< Addchapter/>} />  
-     <Route path="/pages" element={<Pages/>}/>  
-     <Route path="/pages/:id" element={<EditPage/>}/> 
-     <Route path="/chapters" element={<Chapters/>}/>
+     {/* <Route path="/add" element={<Pages/>}/>   */}
+     <Route path="/edit/:id" element={<EditPage/>}/> 
+     <Route path="/add/:sub" element={<Add/>}/>
      {/* <Route path="/editchapter" element={<EditChapter/>}/>  */}
      {/* <Route path="/readChapter" element={<ReadChapter/>}/>  */}
       </Routes>

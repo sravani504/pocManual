@@ -4,7 +4,7 @@ import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 // import Upload Adapter
 import UploadAdapter from  "../../api/UploadAdapter";
-import { posts,getChapters,editChapters,editPages} from "../../api";
+import { posts,getChapters,editChapters,editPages,addPage} from "../../api";
 import { Link } from "react-router-dom";
 // Server URL
 // const URL = "http://localhost:8000/api/v1/upload/"; // for example
@@ -17,7 +17,7 @@ function CustomUploadAdapterPlugin(editor) {
 	};
 }
 
-const Ckeditorapp =({handleCallback,chapter,page})=> {
+const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
 	const [state,setState]=useState({data:" "});
 	const [name,setName]=useState(" ");
 	const navigate=useNavigate();
@@ -53,22 +53,36 @@ const Ckeditorapp =({handleCallback,chapter,page})=> {
 		const handleSubmit=async()=>
 		{
 			console.log(chapter);
-		if(chapter._id)
+		if(sub==="page")
 		{
-			await editChapters(chapter._id,{name,data:state.data})
-			.then((res)=>{
-				if(res)
-				{
-					console.log(res);
+		await addPage(chapter._id,{name,data:state.data})
+		      .then((res)=>
+			  {
+				if(res){
 					fetchChapters();
-					
-					
-				}
-				else{
+					navigate('/');
+				}else
+				{
 					console.log("nothing");
+				
 				}
-			}
-			)
+
+			  })
+			// await editChapters(chapter._id,{name,data:state.data})
+			// .then((res)=>{
+			// 	if(res)
+			// 	{
+			// 		console.log(res);
+			// 		fetchChapters();
+					
+					
+			// 	}
+			// 	else{
+			// 		console.log("nothing");
+			// 	}
+			// }
+			// )
+			console.log("adding page");
 
 		}else{
 			await posts({name,data:state.data})
@@ -89,28 +103,27 @@ const Ckeditorapp =({handleCallback,chapter,page})=> {
 
 		}
 
-useEffect(()=>{
-	console.log(typeof(chapter));
-   if(Object.keys(chapter || {}).length >0 ){
-	setName(chapter?.name);
-    setState({...state, data:chapter?.description});
-   }
+// useEffect(()=>{
+// 	console.log(typeof(chapter));
+//    if(Object.keys(chapter || {}).length >0 ){
+// 	setName(chapter?.name);
+//     setState({...state, data:chapter?.description});
+//    }
   
-},[chapter]);
+// },[chapter]);
 
 
 
 		return (
           <div className="container-md">
-			
-			
+					
 				<div className="form-group">
-							<label>enter chapter name</label>
+							<label>enter {sub} name</label>
 							<input type="text" name="name" onChange={(e)=>setName(e.target.value)} value={name} placeholder="enter name" className="form-control" required/>
          
 		 			</div>
 						<div className="form-group">
-							<label>enter chapter description</label>
+							<label>enter {sub} description</label>
 					
 			 			</div>
 

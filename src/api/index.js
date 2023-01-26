@@ -9,3 +9,4 @@ const API = axios.create({ baseURL: 'http://localhost:5000'})
  export const getPages=()=>API.get('/pages/getpages');
  export const editChapters=(id,updatedData)=>API.patch(`/posts/add/update/${id}`,updatedData)
  export const editPages=(id,name,description)=>API.patch(`/pages/add/update/${id}`,{name,description})
+ export const addPage=(id,pageData)=>API.patch(`/posts/addpage/${id}`,pageData)

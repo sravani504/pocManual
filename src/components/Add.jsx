@@ -1,16 +1,26 @@
 import React from 'react';
 import Ckeditorapp from './pages/Ckeditorapp';
 import { useState,useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams,useLocation} from 'react-router-dom';
 import { getChapters } from '../api';
 
-const Chapters = () => {
+const Add = () => {
 
     const [chapter,setChapter]=useState({}); 
     const [data, setData] = useState([]);
     const [pages, setPages] = useState([]);
     const [page,setPage]=useState({});
-
+    const {sub}=useParams();
+    const location=useLocation();
+    console.log(chapter);
+    
+useEffect(()=>
+{
+  if(location && location.state){
+    const {chapter}=location.state;
+    setChapter(chapter);
+  }
+},[chapter])
   
     const navigate = useNavigate();
 
@@ -36,16 +46,14 @@ const Chapters = () => {
         fetchChapters();
       }, [])
 
-      const handleEdit = (chapter) => {
-        setChapter(chapter);
-      }
+    
     
   
   return (
     <div>
-        <Ckeditorapp handleCallback={handleCallback} chapter={chapter}/>
+        <Ckeditorapp handleCallback={handleCallback} chapter={chapter} sub={sub}/>
     </div>
   );
 }
 
-export default Chapters;
+export default Add;

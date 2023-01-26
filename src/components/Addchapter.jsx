@@ -72,6 +72,7 @@ const Addchapter = ({ handleChange, ...props }) => {
 
     })
   }
+
   console.log(pages);
 
   useEffect(() => {
@@ -81,6 +82,8 @@ const Addchapter = ({ handleChange, ...props }) => {
 
   const handleEdit = (chapter) => {
     setChapter(chapter);
+    navigate('/edit');
+    
   }
 
 
@@ -94,11 +97,11 @@ const Addchapter = ({ handleChange, ...props }) => {
       <div className='container'>
       </div>
       <h1 >User Manuals</h1>
-      <Link to="/chapters">
-      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={() => handleEdit(chapter)} >Add Chapter</button>
+      <Link to="/add/chapter">
+      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }}  >Add Chapter</button>
       </Link>
 
-      <Ckeditorapp handleCallback={handleCallback} chapter={chapter}  />
+      {/* <Ckeditorapp handleCallback={handleCallback} chapter={chapter}  /> */}
 
       <div>
         <Accordion>
@@ -119,21 +122,23 @@ const Addchapter = ({ handleChange, ...props }) => {
                  
                     <button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
                
-                    <Link to="/pages">
-                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=> handleEditPage(page)} >Add Page</button>
-                    </Link>
+                    
+                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=>navigate('/add/page',{state:{chapter}})}>Add Page</button>
+                    
 
                     <nav>
                       <ul>
                         {
-                          pages && pages.length > 0 ?
-                            pages.map((page, index) => {
+                          chapter.pages && chapter.pages.length > 0 ?
+                            chapter.pages.map((page, index) => {
                               return <li key={index}><Link to={{
                                 pathname: `/pages/${page._id}`,
                                 state:page
                               }}>
                                {page.name}
-                              </Link></li>
+                               
+                              </Link><button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button></li>
+
                             }
                             )
                             :
