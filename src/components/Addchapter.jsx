@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
@@ -91,6 +91,11 @@ const Addchapter = ({ handleChange, ...props }) => {
   {
      setPage(page);
   }
+  const handleView = (data) => {
+    if(data){
+      navigate("/view", {state: {data}})
+    }
+  }
   return (
 
     <div className='container-md'>
@@ -113,9 +118,9 @@ const Addchapter = ({ handleChange, ...props }) => {
                   </Accordion.Header>
 
                   <Accordion.Body>
-                    <Link to="/readChapter">
-                      <FontAwesomeIcon icon={faCheckCircle} />
-                    </Link>
+                    <button className='btn btn-primary' onClick={() => handleView(chapter)}>
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
                     {/* <Link to="/chapters">
                    <button onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
                     </Link> */}
@@ -131,14 +136,18 @@ const Addchapter = ({ handleChange, ...props }) => {
                         {
                           chapter.pages && chapter.pages.length > 0 ?
                             chapter.pages.map((page, index) => {
-                              return <li key={index}><Link to={{
-                                pathname: `/pages/${page._id}`,
-                                state:page
-                              }}>
-                               {page.name}
-                               
-                              </Link><button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button></li>
-
+                              return <li key={index}>
+                                {page.name}
+                                <button className='btn btn-primary' onClick={() => handleView(page)}>
+                                  <FontAwesomeIcon icon={faEye} />
+                                </button>
+                                <Link to={{
+                                  pathname: `/pages/${page._id}`,
+                                  state:page
+                                }}>
+                                  <button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
+                                </Link>
+                              </li>
                             }
                             )
                             :

@@ -7,29 +7,25 @@ import EditChapter from './components/pages/Ckeditorapp';
 import ReadChapter from './components/pages/ReadChapter';
 import Ckeditorapp from './components/pages/Ckeditorapp';
 import Add from './components/Add';
+import View from './components/pages/View';
 
 
 
 function App() {
   return (
     <div className="App">
-        
       <Router>
-      <Routes>
-     <Route path="/" element={< Addchapter/>} />  
-     {/* <Route path="/add" element={<Pages/>}/>   */}
-     <Route path="/edit/:id" element={<EditPage/>}/> 
-     <Route path="/add/:sub" element={<Add/>}/>
-     {/* <Route path="/editchapter" element={<EditChapter/>}/>  */}
-     {/* <Route path="/readChapter" element={<ReadChapter/>}/>  */}
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Addchapter />} />  
+          {/* <Route path="/add" element={<Pages/>}/>   */}
+          <Route path="/edit/:id" element={<EditPage />}/> 
+          <Route path="/add/:sub" element={<Add />}/>
+          <Route path='/view' element={<View />} />
+          {/* <Route path="/editchapter" element={<EditChapter/>}/>  */}
+          {/* <Route path="/readChapter" element={<ReadChapter/>}/>  */}
+        </Routes>
       </Router> 
-    
-      
     </div>
-
-  
-  
   );
 }
 
