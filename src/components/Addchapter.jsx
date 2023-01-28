@@ -1,15 +1,14 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import { Link } from 'react-router-dom';
-import Pages from "./pages/Pages";
 import Ckeditorapp from './pages/Ckeditorapp'
-import { getChapters, getPages } from '../api';
-import { useNavigate,useLocation,useParams } from 'react-router-dom';
+import { getChapters } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -63,31 +62,31 @@ const Addchapter = ({ handleChange, ...props }) => {
 
 
 
-  const fetchPages = async () => {
-    await getPages().then((res) => {
-      if (res) {
+  // const fetchPages = async () => {
+  //   await getPages().then((res) => {
+  //     if (res) {
 
-        setPages(res.data);
-      }
-      else {
-        console.log("No data");
-      }
+  //       setPages(res.data);
 
-    })
-  }
+  //     }
+  //     else {
+  //       console.log("No data");
+  //     }
 
-  console.log(pages);
+  //   })
+  // }
 
-  useEffect(() => {
-    fetchPages();
+  // console.log(pages);
 
-  }, [])
+  // useEffect(() => {
+  //   fetchPages();
 
-  const handleEdit = (data) => {
-    console.log(data);
+  // }, [])
+
+  const handleEdit = (data,subject) => {
+    console.log({data,subject});
     setChapter(data);
-
-    navigate(`/edit/${data._id}`,{state:{data}});
+    navigate(`/edit/${data._id}`,{state:{data,subject}});
     
   }
     // const handleEdit=(chapter)=>
@@ -105,6 +104,11 @@ const Addchapter = ({ handleChange, ...props }) => {
   const handleEditPage=(page)=>
   {
      setPage(page);
+  }
+  const handleView = (data) => {
+    if(data){
+      navigate("/view", {state: {data}})
+    }
   }
   return (
 
@@ -128,17 +132,17 @@ const Addchapter = ({ handleChange, ...props }) => {
                   </Accordion.Header>
 
                   <Accordion.Body>
-                    <Link to="/readChapter">
-                      <FontAwesomeIcon icon={faCheckCircle} />
-                    </Link>
+                    <button className='btn btn-primary' onClick={() => handleView(chapter)}>
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
                     {/* <Link to="/chapters">
                    <button onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
                     </Link> */}
                  
-                    <button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
+                    <button className='btn btn-primary' onClick={() => handleEdit(chapter,"editChapter")}> <FontAwesomeIcon icon={faEdit} /></button>
                
                     
-                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=>navigate('/add/page',{state:{chapter}})}>Add Page</button>
+                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=>navigate('/add/page',{state:{id:chapter._id}})}>Add Page</button>
                     
 
                     <nav>
@@ -146,14 +150,13 @@ const Addchapter = ({ handleChange, ...props }) => {
                         {
                           chapter.pages && chapter.pages.length > 0 ?
                             chapter.pages.map((page, index) => {
-                              return <li key={index}><Link to={{
-                                pathname: `/pages/${page._id}`,
-                                state:page
-                              }}>
-                               {page.name}
-                               
-                              </Link><button className='btn btn-primary' onClick={() => handleEdit(page)}> <FontAwesomeIcon icon={faEdit} /></button></li>
-
+                              return <li key={index}>
+                                {page.name}
+                                <button className='btn btn-primary' onClick={() => handleView(page)}>
+                                  <FontAwesomeIcon icon={faEye} />
+                                </button>
+                                <button className='btn btn-primary' onClick={() => handleEdit(page,{subj:"editPage",cid: chapter._id})}> <FontAwesomeIcon icon={faEdit} /></button>
+                              </li>
                             }
                             )
                             :
