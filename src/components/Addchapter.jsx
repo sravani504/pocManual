@@ -6,9 +6,8 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import { Link } from 'react-router-dom';
-import Pages from "./pages/Pages";
 import Ckeditorapp from './pages/Ckeditorapp'
-import { getChapters, getPages } from '../api';
+import { getChapters } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -59,30 +58,31 @@ const Addchapter = ({ handleChange, ...props }) => {
 
 
 
-  const fetchPages = async () => {
-    await getPages().then((res) => {
-      if (res) {
+  // const fetchPages = async () => {
+  //   await getPages().then((res) => {
+  //     if (res) {
 
-        setPages(res.data);
+  //       setPages(res.data);
 
-      }
-      else {
-        console.log("No data");
-      }
+  //     }
+  //     else {
+  //       console.log("No data");
+  //     }
 
-    })
-  }
+  //   })
+  // }
 
-  console.log(pages);
+  // console.log(pages);
 
-  useEffect(() => {
-    fetchPages();
+  // useEffect(() => {
+  //   fetchPages();
 
-  }, [])
+  // }, [])
 
-  const handleEdit = (chapter) => {
-    setChapter(chapter);
-    navigate('/edit');
+  const handleEdit = (data,subject) => {
+    console.log({data,subject});
+    setChapter(data);
+    navigate(`/edit/${data._id}`,{state:{data,subject}});
     
   }
 
@@ -125,10 +125,10 @@ const Addchapter = ({ handleChange, ...props }) => {
                    <button onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
                     </Link> */}
                  
-                    <button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
+                    <button className='btn btn-primary' onClick={() => handleEdit(chapter,"editChapter")}> <FontAwesomeIcon icon={faEdit} /></button>
                
                     
-                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=>navigate('/add/page',{state:{chapter}})}>Add Page</button>
+                      <button className='btn btn-primary mt-2' style={{ marginLeft: "90%" }} onClick={()=>navigate('/add/page',{state:{id:chapter._id}})}>Add Page</button>
                     
 
                     <nav>
@@ -141,12 +141,7 @@ const Addchapter = ({ handleChange, ...props }) => {
                                 <button className='btn btn-primary' onClick={() => handleView(page)}>
                                   <FontAwesomeIcon icon={faEye} />
                                 </button>
-                                <Link to={{
-                                  pathname: `/pages/${page._id}`,
-                                  state:page
-                                }}>
-                                  <button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button>
-                                </Link>
+                                <button className='btn btn-primary' onClick={() => handleEdit(page,{subj:"editPage",cid: chapter._id})}> <FontAwesomeIcon icon={faEdit} /></button>
                               </li>
                             }
                             )

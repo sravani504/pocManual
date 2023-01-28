@@ -1,26 +1,29 @@
 import React from 'react';
-import Ckeditorapp from './pages/Ckeditorapp';
+import Ckeditorapp from './Ckeditorapp';
 import { useState,useEffect } from 'react';
 import { useNavigate,useParams,useLocation} from 'react-router-dom';
-import { getChapters } from '../api';
+import { getChapters} from '../../api/index'
 
-const Add = () => {
+const Edit = () => {
 
     const [chapter,setChapter]=useState({}); 
     const [data, setData] = useState([]);
     const [pages, setPages] = useState([]);
     const [page,setPage]=useState({});
+    const [subject,setSubject] = useState();
+    const {id}=useParams();
     const {sub}=useParams();
     const location=useLocation();
-    const [cid,setId] = useState();
+    console.log(chapter);
     
 useEffect(()=>
 {
   if(location && location.state){
-    const {id}=location.state;
-    setId(id);
+    const {data,subject}=location.state;
+    setSubject(subject)
+    setChapter(data);
   }
-},[chapter])
+},[chapter,subject])
   
     const navigate = useNavigate();
 
@@ -45,15 +48,11 @@ useEffect(()=>
       useEffect(() => {
         fetchChapters();
       }, [])
-
-    
-    
-  
-  return (
+ return (
     <div>
-        <Ckeditorapp handleCallback={handleCallback} chapter={chapter} sub={sub} id={cid}/>
+        <Ckeditorapp handleCallback={handleCallback} chapter={chapter} sub={sub} subject={subject} id={id}/>
     </div>
   );
 }
 
-export default Add;
+export default Edit;

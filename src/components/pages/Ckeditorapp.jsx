@@ -17,7 +17,7 @@ function CustomUploadAdapterPlugin(editor) {
 	};
 }
 
-const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
+const Ckeditorapp =({handleCallback,chapter,page,sub,id,subject})=> {
 	const [state,setState]=useState({data:" "});
 	const [name,setName]=useState(" ");
 	const navigate=useNavigate();
@@ -35,7 +35,6 @@ const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
 				'toggleImageCaption', 'imageTextAlternative'
 			]
 		};
-    console.log(chapter);
 		const fetchChapters =async()=>
 		{
 			await getChapters().then((res)=>{
@@ -52,65 +51,82 @@ const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
 
 		const handleSubmit=async()=>
 		{
-			console.log(chapter);
-		if(sub==="page")
-		{
-		await addPage(chapter._id,{name,data:state.data})
-		      .then((res)=>
-			  {
-				if(res){
-					fetchChapters();
-					navigate('/');
-				}else
+			if(subject && id){
+				if(subject==="editChapter"){
+					console.log("Edititng chapter")
+					await editChapters(id,{name,data:state.data})
+						.then((res)=>{
+							if(res)
+							{
+								console.log(res);
+								fetchChapters();
+								navigate('/');
+							}
+							else{
+								console.log("nothing");
+							}
+						}
+					)
+				}else{
+					if(subject && subject?.subj && subject?.cid)
+					console.log("Edititng page")
+					await editPages(subject?.cid,{name,data:state.data,pageId:id})
+					.then((res)=>{
+						if(res)
+						{
+							console.log(res);
+							fetchChapters();
+							navigate('/');
+						}
+						else{
+							console.log("nothing");
+						}
+					}
+					)
+				}
+			}
+			else{
+				if(sub==="page")
 				{
-					console.log("nothing");
-				
-				}
+				await addPage(id,{name,data:state.data})
+					.then((res)=>
+					{
+						if(res){
+							fetchChapters();
+							navigate('/');
+						}else
+						{
+							console.log("nothing");
+						}
 
-			  })
-			// await editChapters(chapter._id,{name,data:state.data})
-			// .then((res)=>{
-			// 	if(res)
-			// 	{
-			// 		console.log(res);
-			// 		fetchChapters();
-					
-					
-			// 	}
-			// 	else{
-			// 		console.log("nothing");
-			// 	}
-			// }
-			// )
-			console.log("adding page");
+					})
+					console.log("adding page");
 
-		}else{
-			await posts({name,data:state.data})
-			.then((res)=>
-			{
-				if(res)
-				{
-					console.log(res);
-					fetchChapters();
-					navigate("/");
+				}else{
+					await posts({name,data:state.data})
+					.then((res)=>
+					{
+						if(res)
+						{
+							console.log(res);
+							fetchChapters();
+							navigate("/");
+						}
+						else{
+							console.log("nothing");
+						}
+					})
 				}
-				else{
-					console.log("nothing");
-				}
-			})
-		}
-			
-
+			}
 		}
 
-// useEffect(()=>{
-// 	console.log(typeof(chapter));
-//    if(Object.keys(chapter || {}).length >0 ){
-// 	setName(chapter?.name);
-//     setState({...state, data:chapter?.description});
-//    }
+useEffect(()=>{
+   if(Object.keys(chapter || {}).length >0 ){
+	setName(chapter?.name);
+    setState({...state, data:chapter?.description});
+   }
   
-// },[chapter]);
+},[chapter]);
 
 
 
