@@ -17,7 +17,7 @@ function CustomUploadAdapterPlugin(editor) {
 	};
 }
 
-const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
+const Ckeditorapp =({handleCallback,chapter,page,sub,id,})=> {
 	const [state,setState]=useState({data:" "});
 	const [name,setName]=useState(" ");
 	const navigate=useNavigate();
@@ -67,21 +67,7 @@ const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
 				
 				}
 
-			  })
-			// await editChapters(chapter._id,{name,data:state.data})
-			// .then((res)=>{
-			// 	if(res)
-			// 	{
-			// 		console.log(res);
-			// 		fetchChapters();
-					
-					
-			// 	}
-			// 	else{
-			// 		console.log("nothing");
-			// 	}
-			// }
-			// )
+			  })	
 			console.log("adding page");
 
 		}else{
@@ -103,15 +89,15 @@ const Ckeditorapp =({handleCallback,chapter,page,sub})=> {
 
 		}
 
-// useEffect(()=>{
-// 	console.log(typeof(chapter));
-//    if(Object.keys(chapter || {}).length >0 ){
-// 	setName(chapter?.name);
-//     setState({...state, data:chapter?.description});
-//    }
+useEffect(()=>{
+	console.log(typeof(chapter));
+   if(Object.keys(chapter || {}).length >0 ){
+	setName(chapter?.name);
+    setState({...state, data:chapter?.description});
+   }
   
-// },[chapter]);
-
+},[chapter]);
+console.log(chapter);
 
 
 		return (

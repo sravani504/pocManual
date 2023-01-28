@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Pages from "./pages/Pages";
 import Ckeditorapp from './pages/Ckeditorapp'
 import { getChapters, getPages } from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation,useParams } from 'react-router-dom';
 
 
 
@@ -20,6 +20,10 @@ const Addchapter = ({ handleChange, ...props }) => {
   const [pages, setPages] = useState([]);
   const [chapter, setChapter] = useState({});
   const [page,setPage]=useState({});
+  const {id}=useParams();
+  const location=useLocation();
+  console.log(chapter);
+
 
   const navigate = useNavigate();
 
@@ -64,7 +68,6 @@ const Addchapter = ({ handleChange, ...props }) => {
       if (res) {
 
         setPages(res.data);
-
       }
       else {
         console.log("No data");
@@ -80,11 +83,23 @@ const Addchapter = ({ handleChange, ...props }) => {
 
   }, [])
 
-  const handleEdit = (chapter) => {
-    setChapter(chapter);
-    navigate('/edit');
+  const handleEdit = (data) => {
+    console.log(data);
+    setChapter(data);
+
+    navigate(`/edit/${data._id}`,{state:{data}});
     
   }
+    // const handleEdit=(chapter)=>
+    // {
+    //    if(id===chapter._id){
+    //     setChapter(chapter);
+    //     navigate(`/edit/:${id}`);
+    //    }
+    //    else{
+    //     console.log("nothing passed");
+    //    }
+    // }
 
 
   const handleEditPage=(page)=>
@@ -137,7 +152,7 @@ const Addchapter = ({ handleChange, ...props }) => {
                               }}>
                                {page.name}
                                
-                              </Link><button className='btn btn-primary' onClick={() => handleEdit(chapter)}> <FontAwesomeIcon icon={faEdit} /></button></li>
+                              </Link><button className='btn btn-primary' onClick={() => handleEdit(page)}> <FontAwesomeIcon icon={faEdit} /></button></li>
 
                             }
                             )
